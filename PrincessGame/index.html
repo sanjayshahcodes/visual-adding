@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tens and Ones Adventure</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Tens and Ones Adventure</h1>
+    <div id="game-container">
+        <!-- Instructions -->
+        <div id="instructions">
+            <p>Solve the addition problem by dragging the tens and ones tiles onto the board!</p>
+            <p id="problem"></p>
+        </div>
+
+        <div id="main-content">
+            <!-- 100 Board with Character -->
+            <div id="board-container">
+                <div id="number-board"></div>
+                <img id="character" src="assets/character.png" alt="Character">
+            </div>
+
+            <!-- Draggable Tiles -->
+            <div id="tiles-container">
+                <h2>Tiles to Add:</h2>
+                <div id="tens-tiles" class="tiles"></div>
+                <div id="ones-tiles" class="tiles"></div>
+            </div>
+        </div>
+
+        <!-- Score Display -->
+        <div id="score-container">
+            <p>Score: <span id="score">0</span></p>
+        </div>
+
+        <!-- Reset Button -->
+        <button id="reset-button" onclick="resetGame()">New Problem</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

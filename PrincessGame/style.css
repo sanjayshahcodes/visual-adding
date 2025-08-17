@@ -1,0 +1,198 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f8ff;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+#game-container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+#instructions {
+    margin-bottom: 20px;
+}
+
+#problem {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#main-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#board-container {
+    position: relative;
+    margin-right: 20px;
+}
+
+#number-board {
+    display: grid;
+    grid-template-columns: repeat(10, 48px);
+    grid-gap: 2px;
+    width: 500px;
+    border: 2px solid #333;
+    position: relative;
+}
+
+/* Tile Styles */
+.tile {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    font-size: 16px;
+}
+
+.number-tile {
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.number-tile.highlighted {
+    background-color: #add8e6;
+}
+
+.number-tile.highlighted-added {
+    background-color: #90ee90;
+}
+
+/* Character */
+#character {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    transition: all 0.5s ease;
+    /* Add background image or styles as needed */
+}
+
+/* Draggable Tiles */
+.draggable-tile {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #fff;
+    cursor: grab;
+    touch-action: none; /* Prevent default touch actions on the tile itself */
+    user-select: none;  /* Prevent text selection */
+}
+
+.draggable-tile.dragging {
+    opacity: 0.7;
+    cursor: grabbing;
+}
+
+.tens-tile {
+    background-color: #f39c12;
+}
+
+.ones-tile {
+    background-color: #3498db;
+}
+
+.draggable-tile.used {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Tiles Container */
+#tiles-container {
+    margin-bottom: 20px;
+}
+
+.tiles {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.tile-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.draggable-tile {
+    margin: 0 5px;
+}
+
+/* Drag Over Styles */
+#number-board.drag-over {
+    border: 2px dashed #3498db;
+}
+
+.drag-over {
+    border: 2px dashed #3498db;
+}
+
+/* Error Animation */
+@keyframes errorShake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+#number-board.error {
+    animation: errorShake 0.5s;
+    background-color: rgba(255, 0, 0, 0.3);
+}
+
+/* Score */
+#score-container {
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+/* Button Styles */
+#reset-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Additional Styles */
+body {
+    /* Removed touch-action: none to allow scrolling */
+    /* touch-action: none; */
+}
+
+/* Remove margins and padding from body and html to prevent unexpected scrolling */
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Highlight the dropzone when active */
+#number-board.drop-active {
+    /* Optional: Add styles when the dropzone is active */
+}
+
+/* Highlight the dropzone when a draggable is over it */
+#number-board.drop-target {
+    border: 2px dashed #3498db;
+}
+
+/* Style the draggable when it can be dropped */
+.draggable-tile.can-drop {
+    /* Optional: Add styles when the draggable can be dropped */
+}
+
+/* Style the draggable when it's being rejected */
+.draggable-tile.drag-reject {
+    opacity: 0.5;
+}
