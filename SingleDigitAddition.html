@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Addition Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            position: relative; /* Added for positioning Next button and timer */
+        }
+        #problem {
+            font-size: 48px;
+            margin: 20px;
+            color: #333;
+        }
+        #problem .answer {
+            text-decoration: underline;
+        }
+        #score {
+            font-size: 24px;
+            margin: 10px;
+            color: #555;
+        }
+        #feedback {
+            font-size: 32px;
+            margin: 20px;
+            color: green;
+        }
+        #visualization {
+            width: 720px; /* Increased from 600px to 720px */
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 18px;
+            background-color: #fff;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+        .cell {
+            width: 66px;
+            height: 66px;
+            margin: 4.8px;
+            border: 1px solid #eee;
+        }
+        .block {
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        #label-row {
+            display: flex;
+            justify-content: space-around;
+            width: 720px;
+            margin: 0 auto 6px;
+        }
+        #label-row span {
+            width: 66px;
+            text-align: center;
+            font-size: 21.6px;
+            color: #333;
+        }
+        #buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .button-row {
+            display: flex;
+            justify-content: center;
+            margin: 5px 0;
+        }
+        button {
+            width: 90px;
+            height: 90px;
+            font-size: 28px;
+            margin: 5px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(#ffecd1, #fcb69f);
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background 0.2s;
+        }
+        button:hover {
+            background: linear-gradient(#fcb69f, #ffecd1);
+            transform: scale(1.05);
+        }
+        #next {
+            position: absolute;
+            top: 20px;
+            right: 20px; /* Reset to original position */
+            width: auto;
+            font-size: 24px;
+            padding: 15px 60px;
+            margin: 0;
+            border-radius: 10px;
+            background: linear-gradient(#a1c4fd, #c2e9fb);
+            color: #333;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background 0.2s;
+            white-space: normal;
+            display: none; /* Controlled by JavaScript */
+        }
+        #next:hover {
+            background: linear-gradient(#c2e9fb, #a1c4fd);
+            transform: scale(1.05);
+        }
+        #timer {
+            position: absolute;
+            top: 20px;
+            left: 20px; /* Moved to upper left-hand corner */
+            font-size: 24px;
+            color: #333;
+            background: linear-gradient(#e0e0e0, #ffffff);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="problem"></div>
+    <div id="score">0/0</div>
+    <div id="feedback"></div>
+    <div id="visualization"></div>
+    <button id="next" style="display:none;">Next</button>
+    <div id="buttons"></div>
+    <div id="timer">0:00</div>
+
+    <script>
+        let correct = 0;
+        let total = 0;
+        let a, b, formatType;
+        const vis = document.getElementById('visualization');
+        const nextBtn = document.getElementById('next');
+        const buttonsDiv = document.getElementById('buttons');
+        const timerDisplay = document.getElementById('timer');
+        let startTime = Date.now();
+        let timer;
+
+        nextBtn.onclick = function() {
+            newProblem();
+            nextBtn.style.display = 'none';
+            buttonsDiv.style.display = '';
+        };
+
+        const weights = [3, 6, 9, 10, 14, 14, 14, 15, 15];
+        const options = [];
+        for (let num = 1; num <= 9; num++) {
+            for (let i = 0; i < weights[num - 1]; i++) {
+                options.push(num);
+            }
+        }
+
+        function weightedRandom() {
+            const index = Math.floor(Math.random() * options.length);
+            return options[index];
+        }
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000); // Time in seconds
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        function startTimer() {
+            timer = setInterval(updateTimer, 1000);
+            updateTimer(); // Initial call to set timer immediately
+        }
+
+        function newProblem() {
+            a = weightedRandom();
+            b = weightedRandom();
+            const sum = a + b;
+            const rand = Math.random();
+            if (rand < 0.33) {
+                formatType = 1; // a + b = __
+                document.getElementById('problem').innerText = a + ' + ' + b + ' = __';
+            } else if (rand < 0.66) {
+                formatType = 2; // __ + b = sum
+                document.getElementById('problem').innerText = '__ + ' + b + ' = ' + sum;
+            } else {
+                formatType = 3; // a + __ = sum
+                document.getElementById('problem').innerText = a + ' + __ = ' + sum;
+            }
+            document.getElementById('visualization').innerHTML = '';
+            document.getElementById('feedback').innerText = '';
+        }
+
+        function checkAnswer(guess) {
+            const sum = a + b;
+            total++;
+            let correctAnswer;
+            if (formatType === 1) {
+                correctAnswer = sum;
+                if (guess === correctAnswer) {
+                    correct++;
+                    document.getElementById('feedback').innerText = 'Correct!';
+                    document.getElementById('feedback').style.color = 'green';
+                } else {
+                    document.getElementById('feedback').innerText = 'You selected ' + guess + ', the correct answer is ' + correctAnswer;
+                    document.getElementById('feedback').style.color = 'red';
+                }
+                document.getElementById('problem').innerHTML = a + ' + ' + b + ' = <span class="answer">' + correctAnswer + '</span>';
+            } else if (formatType === 2) {
+                correctAnswer = a;
+                if (guess === correctAnswer) {
+                    correct++;
+                    document.getElementById('feedback').innerText = 'Correct!';
+                    document.getElementById('feedback').style.color = 'green';
+                } else {
+                    document.getElementById('feedback').innerText = 'You selected ' + guess + ', the correct answer is ' + correctAnswer;
+                    document.getElementById('feedback').style.color = 'red';
+                }
+                document.getElementById('problem').innerHTML = '<span class="answer">' + correctAnswer + '</span> + ' + b + ' = ' + sum;
+            } else {
+                correctAnswer = b;
+                if (guess === correctAnswer) {
+                    correct++;
+                    document.getElementById('feedback').innerText = 'Correct!';
+                    document.getElementById('feedback').style.color = 'green';
+                } else {
+                    document.getElementById('feedback').innerText = 'You selected ' + guess + ', the correct answer is ' + correctAnswer;
+                    document.getElementById('feedback').style.color = 'red';
+                }
+                document.getElementById('problem').innerHTML = a + ' + <span class="answer">' + correctAnswer + '</span> = ' + sum;
+            }
+            document.getElementById('score').innerText = correct + '/' + total;
+            visualize();
+            nextBtn.style.display = 'block';
+            buttonsDiv.style.display = 'none';
+        }
+
+        function visualize() {
+            vis.innerHTML = '';
+            const sum = a + b;
+            let labelRow = document.createElement('div');
+            labelRow.id = 'label-row';
+            for (let i = 1; i <= 10; i++) {
+                let label = document.createElement('span');
+                label.innerText = i;
+                labelRow.appendChild(label);
+            }
+            vis.appendChild(labelRow);
+
+            let row1 = document.createElement('div');
+            row1.className = 'row';
+            let row2 = document.createElement('div');
+            row2.className = 'row';
+            let pos = 1;
+
+            // Fill row 1
+            for (let c = 0; c < 10; c++) {
+                let cell = document.createElement('div');
+                cell.className = 'cell';
+                if (pos <= sum) {
+                    cell.style.backgroundColor = pos <= a ? 'purple' : 'teal';
+                    cell.classList.add('block');
+                }
+                row1.appendChild(cell);
+                pos++;
+            }
+
+            // Fill row 2
+            for (let c = 0; c < 10; c++) {
+                let cell = document.createElement('div');
+                cell.className = 'cell';
+                if (pos <= sum) {
+                    cell.style.backgroundColor = pos <= a ? 'purple' : 'teal';
+                    cell.classList.add('block');
+                }
+                row2.appendChild(cell);
+                pos++;
+            }
+
+            vis.appendChild(row1);
+            vis.appendChild(row2);
+        }
+
+        // Create buttons 1-18 in three rows
+        const buttonsContainer = document.getElementById('buttons');
+        for (let row = 0; row < 3; row++) {
+            const buttonRow = document.createElement('div');
+            buttonRow.className = 'button-row';
+            for (let i = row * 6 + 1; i <= (row + 1) * 6 && i <= 18; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i;
+                btn.onclick = () => checkAnswer(i);
+                buttonRow.appendChild(btn);
+            }
+            buttonsContainer.appendChild(buttonRow);
+        }
+
+        // Start the game and timer
+        newProblem();
+        startTimer();
+    </script>
+</body>
+</html>
