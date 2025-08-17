@@ -55,8 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Question format configuration - cycle through these combinations
     // Each array element is [show_blocks, allow_splitting, generator_function_name]
     let question_format = [
-        [1, 1, "generateOneMultipleOfTenPlusNonMultiple"],
-        [0, 1, "generateOneMultipleOfTenPlusNonMultiple"], 
+        [1, 1, "generateDoublePlusSingleNoCarry"],
+        [0, 1, "generateDoublePlusSingleWithCarry"], 
         [0, 0, "generateOneMultipleOfTenPlusNonMultiple"],
         [0, 0, "generateOneMultipleOfTenPlusNonMultiple"]
         ];
@@ -68,7 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
         "generateDoubleDigitsNoCarry": generateDoubleDigitsNoCarry,
         "generateBothMultiplesOfTen": generateBothMultiplesOfTen,
         "generateOneMultipleOfTenPlusNonMultiple": generateOneMultipleOfTenPlusNonMultiple,
-        "generateDoublePlusSingleWithCarryOver": generateDoublePlusSingleWithCarryOver
+        "generateDoublePlusSingleWithCarry": generateDoublePlusSingleWithCarry,
+        "generateDoublePlusSingleNoCarry": generateDoublePlusSingleNoCarry
     };
     
     // Function to get current settings based on problem count
@@ -143,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return [a, b];
     }
 
-    function generateDoublePlusSingleWithCarryOver() {
+    function generateDoublePlusSingleWithCarry() {
         let a, b;
         do {
             // Generate a number > 10 that's not a multiple of 10
@@ -155,11 +156,36 @@ document.addEventListener('DOMContentLoaded', () => {
             // Generate a single digit
             b = Math.floor(Math.random() * 9) + 1; // 1-9
             
-            // Check if adding them crosses to the next ten
+            // Check if adding them crosses to the next ten (includes cases that equal 10)
             const onesDigitA = a % 10;
-            const crossesTen = (onesDigitA + b) > 10;
+            const crossesTen = (onesDigitA + b) >= 10;
             
             if (crossesTen) {
+                break;
+            }
+        } while (true);
+        
+        return [a, b];
+    }
+
+    function generateDoublePlusSingleNoCarry() {
+        let a, b;
+        do {
+            // Generate a number > 10 that's not a multiple of 10
+            a = Math.floor(Math.random() * 89) + 11; // 11-99
+            while (a % 10 === 0) {
+                a = Math.floor(Math.random() * 89) + 11;
+            }
+            
+            // Generate a single digit
+            b = Math.floor(Math.random() * 9) + 1; // 1-9
+            
+            // Check if adding them does NOT cross to the next ten AND sum is less than 100
+            const onesDigitA = a % 10;
+            const crossesTen = (onesDigitA + b) > 10;
+            const sumLessThan100 = (a + b) < 100;
+            
+            if (!crossesTen && sumLessThan100) {
                 break;
             }
         } while (true);
