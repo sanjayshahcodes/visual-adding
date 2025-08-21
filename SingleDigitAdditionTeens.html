@@ -179,8 +179,12 @@
         }
 
         function newProblem() {
-            a = weightedRandom();
-            b = weightedRandom();
+            // Keep generating pairs until we get a sum between 10 and 18
+            do {
+                a = weightedRandom();
+                b = weightedRandom();
+            } while (a + b < 10 || a + b > 18);
+            
             const sum = a + b;
             const rand = Math.random();
             if (rand < 0.33) {
