@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eye Patch Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .date {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .eye-instruction {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .left-eye {
+            color: #ff6b6b;
+        }
+        
+        .right-eye {
+            color: #4ecdc4;
+        }
+        
+        .explanation {
+            font-size: 1em;
+            margin-top: 20px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+        
+        .day-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffd93d;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="date" id="currentDate"></div>
+        <div class="day-number" id="dayNumber"></div>
+        <div class="eye-instruction" id="eyeInstruction"></div>
+        <div class="explanation" id="explanation"></div>
+    </div>
+
+    <script>
+        function updatePatchInstructions() {
+            const today = new Date();
+            const day = today.getDate();
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+            const month = monthNames[today.getMonth()];
+            const year = today.getFullYear();
+            
+            // Update date display
+            document.getElementById('currentDate').textContent = `${month} ${day}, ${year}`;
+            document.getElementById('dayNumber').textContent = `Day ${day}`;
+            
+            const eyeInstruction = document.getElementById('eyeInstruction');
+            const explanation = document.getElementById('explanation');
+            
+            if (day % 3 === 0) {
+                // Day is divisible by 3 - patch RIGHT eye
+                eyeInstruction.textContent = 'RIGHT EYE';
+                eyeInstruction.className = 'eye-instruction right-eye';
+                explanation.textContent = `Today is day ${day}, which is divisible by 3, so patch the RIGHT eye.`;
+            } else {
+                // Day is NOT divisible by 3 - patch LEFT eye
+                eyeInstruction.textContent = 'LEFT EYE';
+                eyeInstruction.className = 'eye-instruction left-eye';
+                explanation.textContent = `Today is day ${day}, which is not divisible by 3, so patch the LEFT eye.`;
+            }
+        }
+        
+        // Update immediately when page loads
+        updatePatchInstructions();
+        
+        // Update every hour in case the page is left open overnight
+        setInterval(updatePatchInstructions, 3600000);
+    </script>
+</body>
+</html>
