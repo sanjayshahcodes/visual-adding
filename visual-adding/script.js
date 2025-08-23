@@ -57,11 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let question_format = [
         [0, 1, "generateOneMultipleOfTenPlusNonMultiple"],
         [0, 0, "generateOneMultipleOfTenPlusNonMultiple"],
-        [1, 1, "generateDoublePlusSingleNoCarry"],
         [0, 1, "generateDoublePlusSingleNoCarry"],
         [0, 0, "generateDoublePlusSingleNoCarry"],
-        [0, 0, "generateOneMultipleOfTenPlusNonMultiple"],
-        [0, 0, "generateDoublePlusSingleNoCarry"],
+        [1, 1, "generateDoublePlusSingleWithCarry"],
+        [0, 1, "generateDoublePlusSingleWithCarry"],
+        [0, 0, "generateDoublePlusSingleWithCarry"],
 
         ];
     
