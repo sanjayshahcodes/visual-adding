@@ -153,17 +153,40 @@
             buttonsDiv.style.display = '';
         };
 
-        const weights = [3, 6, 9, 10, 14, 14, 14, 15, 15];
-        const options = [];
-        for (let num = 1; num <= 9; num++) {
-            for (let i = 0; i < weights[num - 1]; i++) {
-                options.push(num);
+        // Define the 20 specific addition pairs that sum to more than 10
+        const additionPairs = [
+            [9, 2], [8, 3], [7, 4], [6, 5],
+            [9, 3], [8, 4], [7, 5], [6, 6],
+            [9, 4], [8, 5], [7, 6],
+            [9, 5], [8, 6], [7, 7],
+            [8, 7], [9, 6],
+            [8, 8],
+            [9, 7],
+            [9, 8],
+            [9, 9]
+        ];
+
+        let currentCycle = [];
+        let cycleIndex = 0;
+
+        function initializeNewCycle() {
+            // Create a copy of all pairs and shuffle them
+            currentCycle = [...additionPairs];
+            // Fisher-Yates shuffle
+            for (let i = currentCycle.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentCycle[i], currentCycle[j]] = [currentCycle[j], currentCycle[i]];
             }
+            cycleIndex = 0;
         }
 
-        function weightedRandom() {
-            const index = Math.floor(Math.random() * options.length);
-            return options[index];
+        function getNextPair() {
+            if (cycleIndex >= currentCycle.length) {
+                initializeNewCycle();
+            }
+            const pair = currentCycle[cycleIndex];
+            cycleIndex++;
+            return pair;
         }
 
         function updateTimer() {
@@ -179,11 +202,10 @@
         }
 
         function newProblem() {
-            // Keep generating pairs until we get a sum greater than or equal to 10
-            do {
-                a = weightedRandom();
-                b = weightedRandom();
-            } while (a + b < 10);
+            // Get the next pair from our systematic cycle
+            const pair = getNextPair();
+            a = pair[0];
+            b = pair[1];
             
             const sum = a + b;
             const rand = Math.random();
@@ -306,6 +328,7 @@
         }
 
         // Start the game and timer
+        initializeNewCycle(); // Initialize the first cycle of pairs
         newProblem();
         startTimer();
     </script>
